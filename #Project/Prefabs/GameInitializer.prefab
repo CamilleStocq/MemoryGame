@@ -46,4 +46,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rows: 4
   colums: 4
-  cardPrefab: {fileID: 1240394406498636998, guid: 036845f55ad270145b2ff18fef425057, type: 3}
+  gap: 0.5
+  cardPrefab: {fileID: -6950358473059912042, guid: 036845f55ad270145b2ff18fef425057, type: 3}
+  colors:
+  - {r: 0, g: 0.6612811, b: 1, a: 0}
+  - {r: 0.161767, g: 1, b: 0, a: 0}
+  - {r: 0.973333, g: 1, b: 0, a: 0}
+  - {r: 1, g: 0.4768407, b: 0, a: 0}
+  - {r: 1, g: 0, b: 0.09759998, a: 0}
+  - {r: 1, g: 0, b: 0.68520164, a: 0}
+  - {r: 0.6965084, g: 0, b: 1, a: 0}
+  - {r: 1, g: 1, b: 1, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  cardsManager: {fileID: -5623781218415617371, guid: 1bee19c883aae354788a0608d3e29096, type: 3}
