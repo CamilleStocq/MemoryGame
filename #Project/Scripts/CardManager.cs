@@ -1,50 +1,75 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CardManager : MonoBehaviour
 {
-    List<CardBehaviour> deck;
-    Color[] colors;
+    [SerializeField] private float delayBeforeFaceDown = 1f;
+    private List<CardBehaviour> deck;
+    private Color[] colors;
+
+    private CardBehaviour memoCard = null;
+    private int combinaisonsFound = 0;
 
     public void Initialize(List<CardBehaviour> deck, Color[] colors)
     {
-        this.colors = colors; //constructeur
         this.deck = deck; //constructeur
+        this.colors = colors; //constructeur
 
-        List<Color> doubleColor = new List<Color>();
+        memoCard = null;
+        combinaisonsFound = 0;
 
+        List<int> colorIndices = new List<int>();
 
-        // int colorIndex;
-        // for (int index = 0; index < deck.Count; index++)
-        // {
-        //     colorIndex = Random.Range(0, colors.Length);
-        //     deck[index].Initialize(colors[colorIndex], colorIndex, this); // this pour se passer sois meme
-
-        // }
-
-        for (int index = 0; index < deck.Count / 2; index++)
+        for (int i = 0; i < deck.Count; i++)
         {
-            doubleColor.Add(colors[index]);
-            doubleColor.Add(colors[index]);
+            colorIndices.Add(i / 2);
         }
 
-        for (int i = 0; i < doubleColor.Count; i++)
+        // Mélange les indices et assigne les cartes
+        for (int i = 0; i < deck.Count; i++)
         {
-            Color temp = doubleColor[i];
-            int randomIndex = Random.Range(0, colors.Length);
-            doubleColor[i] = doubleColor[randomIndex];
-            doubleColor[randomIndex] = temp;
-        }
+            int rand = Random.Range(i, deck.Count);
+            (colorIndices[i], colorIndices[rand]) = (colorIndices[rand], colorIndices[i]);
 
-        for (int j = 0; j < deck.Count; j++)
-        {
-            deck[j].Initialize(doubleColor[j], j, this);
+            int colorIndex = colorIndices[i];
+            Color color = colors[colorIndex];
+            deck[i].Initialize(color, colorIndex, this);
         }
     }
 
     public void CardIsClicked(CardBehaviour card)
     {
         // reaction des cartes ici (face visible)
-        card.FaceUp(); 
+        if (card.IsFaceUp) return; // si elle est retournée on ne peut rien faire 
+
+        card.FaceUp();
+
+        if (memoCard != null)
+        {
+            if (card.IndexColor != memoCard.IndexColor)// si on a une carte on compare les couleur
+            {
+                // Debug.Log("bravoooo !!!! C'est les memes");
+                memoCard.FaceDown(delayBeforeFaceDown);
+                card.FaceDown(delayBeforeFaceDown);
+            }
+            else
+            {
+                // compter le nbr de combinaison de cartes trouvé
+                combinaisonsFound++;
+
+                if (combinaisonsFound == deck.Count / 2)
+                {
+                    SceneManager.LoadScene("Victory"); // on change de scene 
+                    //victoryManager
+                }
+            }
+
+            memoCard = null;
+        }
+        else
+        {
+            memoCard = card; // si on a pas de carte c'est notre carte 1 
+        }
     }
 }

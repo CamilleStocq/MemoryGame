@@ -11,9 +11,9 @@ public class CardBehaviour : MonoBehaviour
 
     private Vector3 memoScale; // vector3 sans valeur de base = 0
     private Color color;
-    private int indexColor;
     private CardManager manager;
 
+    public int IndexColor { get; private set; }
     public bool IsFaceUp { get; private set; } = false; // propriété qu'on peut lire de l'exterieur mais pas modifiable de l'exterieur
 
     private void OnMouseDown()
@@ -36,7 +36,7 @@ public class CardBehaviour : MonoBehaviour
     public void Initialize(Color color, int indexColor, CardManager manager)
     {
         this.color = color;
-        this.indexColor = indexColor;
+        IndexColor = indexColor;
         this.manager = manager;
 
         ChangeColor(baseColor);
@@ -55,16 +55,17 @@ public class CardBehaviour : MonoBehaviour
         IsFaceUp = true;
     }
 
-    public void FaceDown()
+    public void FaceDown(float delay = 0f)
     {
         // ChangeColor(color);
-        StartCoroutine(ChangeColorWithLerp(baseColor));
+        StartCoroutine(ChangeColorWithLerp(baseColor, delay));
         IsFaceUp = false; // on la retourne dans le sens ou on ne voit pas la couleur 
     }
 
     // coroutine s'execute en parallele du programme
-    private IEnumerator ChangeColorWithLerp(Color color) // elle DOIT etre un IEnumerator !!!!! 
+    private IEnumerator ChangeColorWithLerp(Color color, float delay = 0f) // elle DOIT etre un IEnumerator !!!!! 
     {
+        yield return new WaitForSeconds(delay); // pour faire attendre un certain nombre de seconde avant de commencer
         float timer = 0f;
         Color startColor = GetComponent<Renderer>().material.color;
 
