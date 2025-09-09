@@ -31,7 +31,7 @@ public class CardManager : MonoBehaviour
         for (int i = 0; i < doubleColor.Count; i++)
         {
             Color temp = doubleColor[i];
-            int randomIndex = Random.Range(i, doubleColor.Count);
+            int randomIndex = Random.Range(0, colors.Length);
             doubleColor[i] = doubleColor[randomIndex];
             doubleColor[randomIndex] = temp;
         }
@@ -40,5 +40,11 @@ public class CardManager : MonoBehaviour
         {
             deck[j].Initialize(doubleColor[j], j, this);
         }
+    }
+
+    public void CardIsClicked(CardBehaviour card)
+    {
+        // reaction des cartes ici (face visible)
+        card.FaceUp(); 
     }
 }
